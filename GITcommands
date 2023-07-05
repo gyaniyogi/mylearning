@@ -1,346 +1,713 @@
-Youtube Training links
-EDUREKA https://www.youtube.com/live/KMOmw19ZCGs?feature=share
-
-
-https://github.com/gyaniyogi/yogi.git
-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
-
-GIT installation on Linux System
-
-yum  install git -y		apt-get install git(for debian family)		yum install epel-release (for VM)
-git --version
-
-git config --list
-
-git config --global user.name "B. Yogi"
-git config --global user.email "yogioffers@gmail.com"
-git config --list
-
-ls -a
-cat .gitconfig
-
-
-Use of ADD, Delete, Commit
-
-
-mkdir project1
-cd project1
-git init
-
-git config --global init.defaultbranch main (To change default branch name)
-
-ls -a
-pwd
-
-
-git status
-vim file1
-git status			(file is in red colour file is in working dir)
-
-git add *                       
-git status			(file is in green colour  file is in stage area) 
-
-git commit 
-git status
-git commit -m  "1st update"
-git status
-vim file1
-git status
-git restore file1
-vim file1
-git status
-git add file1
-git status
-git commit -m "2nd update"
-git status
-
-
-
-GIT log
-
-git log
-git show  4fd1c8556edc7dda5204aba5fc44a55977c912ab
-
-git dif id1 id2
-
-For e.g.
-git diff  4fd1c8556edc7dda5204aba5fc44a55977c912ab 1f6f3f51ba3ea08db1da49b5f0e23f26c0ab241a
+GIT COMMANDS 
 
  
 
-git log --oneline
-git show 4fd1c85
+INDEX  
 
-For e.g.
-git diff 4fd1c85 1f6f3f5
+INSTALLATION 
 
-git config --list
-git log --oneline --author=yogi
-git log --oneline --author=yogi -2
-git log --oneline --since=2023-05-30
-git log --oneline --since=2023-05-30
-git log --oneline --grep 1
+BASIC COMMANDS 
 
+LOG 
 
-GIT IGNORE
+REVERT 
 
-touch song.mp3
-touch index.html
-touch file2.txt
-touch index.html
-touch video1.mp4
+STASHING 
 
-git status
+BRANCH  
 
-vim .gitignore
+BRANCH MERGE & REBASE 
 
-*.mp3
-*.txt
+GIT HUB 
 
-:wq
+BACKUP & BUNDLE 
 
-git status
+FORK 
 
-vim .gitignore
+  
 
-*.mp3
+  
 
-:wq
+  
 
-git status
+  
 
-REVERT
+  
 
-  touch file5
-  cat >> file5
-  git add file5
-  git commit -m newchange	
-  cat file5 
-  cat >> file5 
-  git status
-  git log --oneline
-  git add .
-  git commit -m new2
-  git status
-  git log --oneline
-  git revert e029f05
-  cat file5 
+GIT installation on Linux System 
 
-GIT HUB LOGIN
+  
 
+yum  install git -y		apt-get install git(for debian family)		yum install epel-release (for VM) 
 
-signup on GIT HUB
-CREATE A PROJECT
+git --version 
 
-mkdir myserver1
-cd server1
-git clone https://github.com/gyaniyogi/yoyo.git
+  
 
-ls
+GIT BASIC COMMANDS 
 
-cd projectnameDirectory
+  
 
-git status
+git config --list 
 
-ls
-touch file2
-vim file2
-git status 
-git add file2
-git status 
-git commit -m "1st update for server"
-git status
+  
 
- git push https://github.com/gyaniyogi/yoyo.git
+git config --global user.name "B. Yogi" 
 
-(Kindly Note: give your github username and create a token for password in a classic standard)
+git config --global user.email "yogioffers@gmail.com" 
 
-git config --global push.default simple
+git config --list 
 
-git status
+  
 
-PULL FROM SERVER
+  
 
-CREATE OR MODIFY FILE ON SERVER
+Use of ADD, Delete, Commit 
 
-ls
-git fetch
-ls
-git merge
-ls
+  
 
-or just give command
+  
 
-git pull
-ls
+mkdir project1 
 
-git status
+cd project1 
 
+git init 
 
-CREATING, ACCESSING AND DELETEING NEW BRANCH ON SERVER
+  
 
+  
 
-git fetch
+ls -a 
 
-git remote
-git remote -v (it shows which remote repository ur connected to )
+cat .gitconfig 
 
+  
 
-FORK (Its a copy of repository)
-
-git ls-files
-
-BRANCHES
-
-git branch (To check branches)
-git branch second ( To create Branch)
-git branch
-git checkout second ( TO change Branch from old to new and in this case new Branch name is second)
-git branch (Now verify)
-
-git branch -d second (To delete branch) or git branch -D second (forcefull delete)
-
-
-git checkout -b fourth ( To create new branch and switch into this new branch in single command) 
-git checkout fifth 7654321 ( To Create new branch from commit ID)
-git checkout sixth HEAD~4 ( To Create new branch from HEAD)
-
-Kindly note above all 4 different ways to create a branch and switching between them...
-
-git checkout commitid (for e.g. git checkout 2223334)
-git branch -a ( To list all branch)
-
-git status
-git merge second
-git status 
-git log
-
-git branch 
-
-REBASE BRANCH (Parallel Development)
-
-git branch third
-git checkout third
-git log
-git log --online
-git log --online master
-git checkout master
-vi file3
-git add file3
-git commit -m "third update"
-git log --online third
-
-git branch 
-git rebase master
-git log --online
-
-git rebase --i (i for interactive)
-git rebase --d (d for discard)
-git rebase --p (p to modify)
-git rebase --x (x to excute)
-
-ARCHIVE Your Directory Data
-
-git archive master --format=zip output=../backup.zip
-git bundle create ../repo.bundler master
-
-HOW TO SAVE UNCOMMITTED CHANGES
-
-git stash
-git stash apply
-
-REMOVE REMOTE REPOSITORY
-
-git remote -v
-git remote rm origin
-git remote
 pwd 
-cd .. 
-rm -rf dirname
 
-git branch -d branchname
+  
 
-RENAME BRANCH
+  
 
-git branch -m oldname newname
-git branch
+git status 
 
-git push :oldname newname
-git push origin :oldname newname
+vim file1 
 
-RENAME Current branch
+git status			(file is in red colour file is in working dir) 
 
-git branch -m newname
+  
 
-git branch -m newname latestname
-git branch
-git push origin :newname latestname
+git add *                        
 
-DELETE BRANCH FROM GIT HUB
+git status			(file is in green colour  file is in stage area)  
 
-git push -d origin latestname
+  
 
+git commit  
 
-FORCE PUSH
+git status 
 
-git fetch origin master
-git branch
-git checkout master
-cat file4
-cat >> file4
-hi
-git add .
-git commit -m "updated"
-git push origin master
-git push -f origin master
+git commit -m  "1st update" 
 
+git status 
 
-NANO VI VIM EM(for MAC) EDITOR
+vim file1 
 
-vim file1
-nan o file1
-em file1
+git status 
 
-Kindly note : GIT stores data as a series of snapshots and not in series of data
+git restore file1 
 
-BRANCH MERGE CONFLICT
+vim file1 
 
-git conflict --global merge.tool  myconflict
-git mergetool
+git status 
 
-STASHING
+git add file1 
 
-git stash
+git status 
 
-git stash list
+git commit -m "2nd update" 
+
+git status 
+
+  
+
+GIT IGNORE 
+
+  
+
+touch song.mp3 
+
+touch index.html 
+
+touch file2.txt 
+
+touch index.html 
+
+touch video1.mp4 
+
+  
+
+git status 
+
+  
+
+vim .gitignore 
+
+  
+
+*.mp3 
+
+*.txt 
+
+  
+
+:wq 
+
+  
+
+git status 
+
+  
+
+vim .gitignore 
+
+  
+
+*.mp3 
+
+  
+
+:wq 
+
+  
+
+git status 
+
+  
+
+GIT log 
+
+  
+
+git log 
+
+git show  4fd1c8556edc7dda5204aba5fc44a55977c912ab 
+
+  
+
+git dif id1 id2 
+
+  
+
+For e.g. 
+
+git diff  4fd1c8556edc7dda5204aba5fc44a55977c912ab 1f6f3f51ba3ea08db1da49b5f0e23f26c0ab241a 
+
+  
+
+  
+
+  
+
+git log --oneline 
+
+git show 4fd1c85 
+
+  
+
+For e.g. 
+
+git diff 4fd1c85 1f6f3f5 
+
+  
+
+  
+
+git log --oneline --author=yogi 
+
+git log --oneline --author=yogi -2 
+
+git log --oneline --since=2023-05-30 
+
+git log --oneline --since=2023-05-30 
+
+git log --oneline --grep 1 
+
+  
+
+  
+
+  
+
+  
+
+REVERT 
+
+  
+
+touch file5 
+
+cat >> file5 
+
+  	git add file5 
+
+  	git commit -m newchange	 
+
+cat file5  
+
+cat >> file5  
+
+git status 
+
+git log --oneline 
+
+git add . 
+
+git commit -m new2 
+
+git status 
+
+git log --oneline 
+
+git revert e029f05 
+
+cat file5  
+
+  
+
+STASHING 
+
+  
+
+git stash 
+
+git stash list 
+
+git stash show  
+
+git stash apply 
+
+git stash clear 
+
+git stash --help 
+
+  
+
+PRACTICAL ON STASH (TO SAVE UNCOMMITTED CHANGES) 
+
+  
+
+ 	git status 
+
+    	git branch  
+
+    	cat >> file6 
+
+    	git add . 
+
+    	git status 
+
+   	git stash -u 
+
+   	git status 
+
+git stash list 
 
 git stash show 
 
-git stash apply
+git stash 
 
-git stash clear
+git stash apply 
 
-git stash --help
+  
 
-PRACTICAL ON STASH
+BRANCHES 
 
-	git status
-    	git branch 
-    	cat >> file6
-    	git add .
-    	git status
-   	git stash -u
-   	git status
-	git stash list
-	git stash show
+  
 
-GIT REBASE
+git branch (To check branches) 
 
+git branch second ( To create Branch) 
 
+git branch 
 
-	BACKUP OF GIT
-git archive master --format=zip --output=../backup1.zip
+git checkout second ( TO change Branch from old to new and in this case new Branch name is second) 
 
-CREATE BUNDLE
+git branch (Now verify) 
 
-git bundle create ../repo.bundler master
+git branch -d second (To delete branch) or git branch -D second (forcefull delete) 
+
+ git checkout -b fourth ( To create new branch and switch into this new branch in single command)  
+
+git checkout fifth 7654321 ( To Create new branch from commit ID) 
+
+git checkout sixth HEAD~4 ( To Create new branch from HEAD) 
+
+  
+
+Kindly note above all 4 different ways to create a branch and switching between them... 
+
+  
+
+git checkout commitid (for e.g. git checkout 2223334) 
+
+git branch -a ( To list all branch) 
+
+  
+
+git status 
+
+git merge second 
+
+git status  
+
+git log 
+
+git ls-files 
+
+git branch  
+
+  
+
+REBASE BRANCH (Parallel Development) 
+
+  
+
+git branch third 
+
+git checkout third 
+
+git log 
+
+git log --oneline 
+
+git log --oneline master 
+
+git checkout master 
+
+vi file3 
+
+git add file3 
+
+git commit -m "third update" 
+
+git log --online third 
+
+  
+
+git branch  
+
+git rebase master 
+
+git log --online 
+
+  
+
+git rebase --i (i for interactive) 
+
+git rebase --d (d for discard) 
+
+git rebase --p (p to modify) 
+
+git rebase --x (x to excute) 
+
+  
+
+  
+
+GIT HUB LOGIN 
+
+  
+
+  
+
+signup on GIT HUB 
+
+CREATE A PROJECT 
+
+  
+
+mkdir myserver1 
+
+cd server1 
+
+git clone https://github.com/gyaniyogi/yoyo.git 
+
+  
+
+ls 
+
+cd projectnameDirectory 
+
+git status 
+
+ls 
+
+touch file2 
+
+vim file2 
+
+git status  
+
+git add file2 
+
+git status  
+
+git commit -m "1st update for server" 
+
+git status 
+
+  
+
+git push https://github.com/gyaniyogi/yoyo.git 
+
+  
+
+(Kindly Note: give your github username and create a token for password in a classic standard) 
+
+  
+
+git config --global push.default simple 
+
+  
+
+git status 
+
+  
+
+PULL FROM SERVER 
+
+  
+
+CREATE OR MODIFY FILE ON SERVER 
+
+  
+
+ls 
+
+git fetch 
+
+ls 
+
+git merge 
+
+ls 
+
+  
+
+or just give command 
+
+  
+
+git pull 
+
+ls 
+
+  
+
+git status 
+
+  
+
+  
+
+CREATING, ACCESSING AND DELETEING NEW BRANCH ON SERVER 
+
+  
+
+  
+
+git fetch 
+
+  
+
+git remote 
+
+git remote -v (it shows which remote repository ur connected to ) 
+
+  
+
+REMOVE REMOTE REPOSITORY 
+
+  
+
+git remote -v 
+
+git remote rm origin 
+
+git remote 
+
+pwd  
+
+cd ..  
+
+rm -rf dirname 
+
+  
+
+git branch -d branchname 
+
+  
+
+RENAME BRANCH 
+
+  
+
+git branch -m oldname newname 
+
+git branch 
+
+  
+
+git push :oldname newname 
+
+git push origin :oldname newname 
+
+  
+
+RENAME Current branch 
+
+  
+
+git branch -m newname 
+
+  
+
+git branch -m newname latestname 
+
+git branch 
+
+git push origin :newname latestname 
+
+  
+
+DELETE BRANCH FROM GIT HUB 
+
+  
+
+git push -d origin latestname 
+
+  
+
+  
+
+FORCE PUSH 
+
+  
+
+git fetch origin master 
+
+git branch 
+
+git checkout master 
+
+cat file4 
+
+cat >> file4 
+
+hi 
+
+git add . 
+
+git commit -m "updated" 
+
+git push origin master 
+
+git push -f origin master 
+
+  
+
+  
+
+  
+
+  
+
+FORK (Its a copy of repository) 
+
+  
+
+  
+
+  
+
+  
+
+ARCHIVE Your Directory Data 
+
+  
+
+git archive master --format=zip output=../backup.zip 
+
+git bundle create ../repo.bundler master 
+
+  
+
+  
+
+  
+
+  
+
+NANO VI VIM EM EDITOR 
+
+  
+
+vim file1 
+
+nan o file1 
+
+em file1 	(em tool works on MAC) 
+
+  
+
+Kindly note : GIT stores data as a series of snapshots and not in series of data 
+
+  
+
+BRANCH MERGE CONFLICT 
+
+  
+
+git conflict --global merge.tool  myconflict 
+
+git mergetool 
+
+  
+
+  
+
+BACKUP OF GIT 
+
+  
+
+git archive master --format=zip --output=../backup1.zip 
+
+  
+
+CREATE BUNDLE 
+
+  
+
+git bundle create ../repo.bundler master 
+
+ 
+
+Youtube Training links 
+
+EDUREKA https://www.youtube.com/live/KMOmw19ZCGs?feature=share 
+
+  
+
+  
+
+https://github.com/gyaniyogi/yogi.git 
+
+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 
+
+ 
+
+ 
+
+ 
