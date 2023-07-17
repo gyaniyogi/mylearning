@@ -1,0 +1,223 @@
+KUBERNETES 
+
+IT is release in 2014 by GOOGLE and then it is donated to CNCF(Cloud Native Computing Foundation) and CNCF OFFERS OFFICIAL CERTIFICATIONS OF KUBERNETES
+
+Kubernetes is also known as K8s and its devlopes using a programming language GO LANG
+
+
+HOW GOOGLE MANAGES YT, SEARCH ENGINE, GMAIL etc?
+using a tool name BORG and kubernetes is a smaller version of BORG.
+
+
+jobs on K8s (refer photos)
+
+INSTALLATION on pc, server or on VM
+
+1. PLAY WITH K8s (INSTALLATION ON WEBSITE)
+https://labs.play-with-k8s.com/
+
+2. minikubs
+
+3. kubeadm (hardware requirement is minimum 3GB ram & 3cpu + network + disable swap on all nodes + disable selinux on all nodes)
+
+
+INSTALLATION on CLOUD
+
+Google Kubernetes Engine (GKE)
+AMAZON (EKS)
+AZURE KUBERNETES SERVICE (AKS)
+
+COMMANDS FOR INSTALLATION on PLAY WITH K8s
+
+CONFIGURE MASTER NODE
+kubeadm --init  apiserver-advertise-address $(hostname -i)
+
+CONFIGURE NETWORK
+kubectl apply -n kube-system -f url
+
+CONFIGURING WORKER NODE
+
+STEP-1 CREATE NEW INSTANCE
+
+STEP-2 JOIN WORKER NODE TO THE CLUSTER
+kubeadm join --token [...] --discovery-token-ca-cert-hash [...]
+
+TESTING CLUSTER
+
+kubectl go no
+
+kubectl run kubernets-bootcamp --image=path
+
+kubectl go po
+
+
+COMMANDS FOR INSTALLATION WITH KUBEADM
+
+STEP-1 CREATE 4VM FOR MASTER & WORKER NODES
+STEP-2 DISABLE SELINUX AND SWAP ON ALL NODES
+STEP-3 INSTALL kubeadm, kubelet, kubectl & Docker on all nodes
+	start and enable docker and kubelet on all nodes (refer image of installation1)
+ON INSTALL docker on all VMs
+	yum update -y
+	yum install docker -y  or apt-get 
+	systemctl start docker; systemctl enable docker
+for other packages connect to repository 
+
+cat >> /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+exclude=kube*
+
+
+ yum install kubelet kubeadm kubectl --disableexcludes=kubernetes -y
+
+vim /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+
+
+systemctl --system
+systemctl start kubelet; systemctl enable kubelet
+systemctl status kubelet
+
+ kubeadm version
+
+STEP-4 INITIALIZE THE MASTER NODE
+kubeadm init --pod-network-cidr=172.31.44.45/20
+
+STEP-5 COFIGURE POD NETWORK
+kubectl apply -f  github   (note: type github link)
+
+STEP-6 JOIN WORKER NODES TO THE CLUSTER 
+https://www.google.com/search?q=configure+kubernetes+on+centos+9&rlz=1C1CHBD_enIN1042IN1042&oq=configure+kubernetes+on+centos+9&aqs=chrome..69i57j0i22i30l9.12463j1j4&sourceid=chrome&ie=UTF-8#fpstate=ive&vld=cid:88dcaf88,vid:UN2IibUnztk
+kubeadm join --token [] IPADD:PORT --discovery-token-ca-cert-hash***********
+
+
+kubadm token create --print-join-command
+kubectl get no
+
+TEST
+
+kubectl run kubernetes--bootcamp --image=gcr.io/goolge-samples/kubernetes-bootcamp:v1 --port=8080
+kubectl get po
+ 
+ON MASTER
+kubeadm init
+
+ON WORKER NODE
+kubeadm join --token [] --discovery-token-ca-cert-hash []
+
+
+TO CREATE/DELETE/LIST/GENERATE TOKEN 
+kubeadm token create
+
+TO CHECK VERSION
+kubeadm version
+
+UPGRADE KUBEADM
+kubeadm upgrade plan [version]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LEARNING ANY TOOL AND TECHNOLOGY STARTS WITH ARCHITECHTURE
+
+
+inside one cluster k8s support upto 5000 worker nodes
+inside one node has many pod and inside pod we can have multiple container
+node has separate ip add and pod has different ip add
+
+to access container we use pod ip address:port no
+
+Inter-pod communication & intra-pod communication
+
+POD LIFECYCLE
+
+ PENDING 
+RYNNING
+SUCCEEDED
+OR FAILED
+IF POD DIES THEN U HAVE TO CREATE NEW POD
+
+POD CONFIG
+
+note:yaml or jason format
+
+kubectl get pod nginx-pod -o yaml
+
+nginx-pod.yaml
+
+apiversion: V1
+kind : Pod
+metadata: 1. Name of the pod
+	  2. Label
+specification: 
+	containers:
+	- name: nginx-container
+	 image: nginx
+
+POD CREATE & DISPLAY create on master
+
+kubectl create -f nginx-pod.yaml
+
+kubectl get pod
+
+kubectl get pod -o wide
+
+kubectl get pod nginx-pod -o yaml
+
+POD DESCRIBE
+
+kubectl describe pod nginx-pod
+
+TESTING
+
+ping ipaddress of pod
+
+kubectl exec -it ngix-pod -- /bin/sh
+
+hostname
+
+exit 
+
+TO DELETE POD
+
+
+kubectl delete pod nginx-pod
+
+kubectl get pods
+kubectl create -f nginx-pod.yaml
+kubectl get pods
+kubectl get pods -o wide
+kubectl get pods -o yaml | more
+
+
+EXPOSE PODS using nodeport service
+
+kubectl expose pod nginx-pod --type=NodePort --port=80
+
+
+Display service and find nodeport
+
+ kubectl describe svc nginx-pod
+
+Open Browser
+http://nodeip:nodeport/test.html (ip address must be of ay external ip of node)
+
+
+

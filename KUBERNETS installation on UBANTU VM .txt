@@ -1,0 +1,397 @@
+ https://youtu.be/nbp9zxkmi74
+
+System Prerequisites  
+
+Download & Install CentOS 7 Min
+Creating a master node 
+System requirements (Master)
+2048 mb - RAM 
+2 core processor 
+20GB Disk (safer side) 
+
+The Full Step by Step Installation Video: 
+https://www.youtube.com/watch?v=nbp9zxkmi74&t=138s 
+
+The master node will not get initiated if the RAM and virtual CPU cores not sufficient 
+
+Note: You don’t have to worry if you are using VirtualBox. You can always increase it.  
+
+If you are using VirtualBox, make sure you have a single Network Interface and sometimes Adapter 1 in VirtualBox does not work on Bridged Setting. You have to enable the second adapter and disable the first one.
+
+Overview  	
+
+This document will help you to install the k8 cluster. The document is purely for learning purposes and I do not recommend installing this setup for production use. The cluster installation will give you an idea about the installation process and what to check if something goes wrong. 
+
+Please follow the steps:
+
+Download Minimal  ISO for OS
+	CentOS 7 
+
+Complete the CentOS installation - Basic Installation
+
+Setup static IP Address 
+nmtui edit
+
+Update system hostname (all system): vim /etc/hostname
+	Example: 
+k8-master
+
+Update hosts file (all node info):  vim /etc/hosts
+	Example: 
+192.168.55.10		k8-master1
+192.168.55.20		K8-worker1
+192.168.55.30		k8-worker2
+
+Update system packages
+yum update
+
+Turn-Off Swap (all nodes) 
+	swapoff -a
+ vim /etc/fstab
+
+	To permanently off the swap we need to comment the swap partition form /etc/fstab
+
+Disable Firewall (all nodes) 
+sudo systemctl stop firewalld
+
+To permanently disable the firewall:
+systemctl disable firewalld
+
+
+Install below mentioned packages (All nodes):
+yum install -y wget
+yum install -y vim
+yum install -y git
+
+
+Install docker-runtime (All nodes)
+	In here I wanted to use doc
+
+Link    - Pleas e subscribe Brother if possible
+Install the yum-utils 
+
+ yum install -y yum-utils
+
+sudo yum-config-manager \
+--add-repo \
+https://download.docker.com/linux/centos/docker-ce.repo
+
+
+-y 
+Install docker engine 
+	
+sudo yum install containerd.io
+
+Install cri-dockerd (to use docker is a runtime for K8)
+Link 
+
+Install required packages:
+kubeadm, kubelet, kubectl 
+Link
+
+
+Init cluster 
+kubeadm init
+
+Verify the cluster info
+kubectl cluster-info
+If check system pods before CNI configuration,
+Install Calico CNI
+	Link
+By default Calico uses subnet 192.168.0.16/24.
+If you already using that subnet for nodes, you may need to change subnet by changing below mentioned parameter in calico.yaml (before deployment)
+   
+      - name: CALICO_IPV4POOL_CIDR
+        value: "10.142.0.0/24"
+
+ 
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the fol lowing as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+NOW CONNECT CNI 
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+
+
+KINDLY NOTE: BELOW IS THE COPIED CONTENT OF KUBEADM COMMAND ENDING LINES FOR JOINING NODES
+
+
+kubeadm join 192.168.55.10:6443 --token oxr55s.q3hcyoicw1calnbt \
+        --discovery-token-ca-cert-hash sha256:3967553f5dcc148248307d9753b4038622cbbd2ddd96b39c2686fa458b21bd9f
+
+
+
+
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+
+
+kubeadm init --cri-socket unix:///run/cri-dockerd.sock
+
+
+If the Join command token is expired or you forgot:
+
+kubeadm token create --print-join-command
+
+Remove node from the cluster (--ignore-daemonsets will be used if you do not care about pods running on that node)
+
+kubectl drain <node hostname> --ignore-daemonsets
+
+kubectl delete <node hostname>
+
+On the Node: kubeadm reset
+
+
+Errors:
+Kubeadm unknown service runtime.v1alpha2.RuntimeService
+
+
+Solution:
+rm /etc/containerd/config.toml
+Solution:
+rm /etc/containerd/config.toml
+systemctl restart rm containerd
+kubeadm init
+
+[ERROR FileContent--proc-sys-net-ipv4-ip_forward]:
+Solution: Link
+echo '1' > /proc/sys/net/ipv4/ip_forward
+modprobe bridmodprobe ge
+modprobe br_netfilter
+
+
+kubeadm join 192.168.55.10:6443 --token 7r204l.dokibh52fa83umhi \
+        --discovery-token-ca-cert-hash sha256:a18a6fe3b2a068853e69e1e4fb4b24e7b37b11f0f7a83a6feb34260572e7551f
+
+
+    1 hostnamectl hostname node1
+    2  ip addr
+    3  nmtui
+    4  nmtui edit
+    5  ip addr
+    6  reboot
+    7  ping google
+    8  ping google.com
+    9  ip addr
+   10  nmtui edit
+   11  ping 8.8.8.8
+   12  ping gyanitechnologies.com
+   13  ping google.com
+   14  hostnamectl hostname
+   15  vim /etc/passwd
+   16  hostnamectl hostname master
+   17  exit
+   18  init 6
+   19  yum update -y
+   20  swapoff -a
+   21  vim /etc/fstab
+   22  getenforce
+   23  
+
+nmtui edit
+    2  hostnamectl hostname master
+    3  init 6
+    4  vim /etc/fstab
+    5  swapoff -a
+    6  vim /etc/sysconfig/selinux
+    7  setenforce 0
+    8  vim /etc/hosts
+    9  ping google.com
+   10  yum update -y
+   11  systemctl disable firewalld.service
+   12  systemctl stop firewalld.service
+   13  yum install git -y
+   35  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+   36  ls /etc/yum.repos.d/
+   37  yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+   38   systemctl start docker
+   39   systemctl status docker
+   40  docker run hello-world
+   41  systemctl is-enabled docker
+   42  systemctl enable docker
+  
+   43  yum install kubectl kubeadm kubelet -y
+   44  cat > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+   45  yum update -y
+   46  yum install kubectl kubeadm kubelet -y
+   47  kubeadm version
+   48  kubeadm init
+   49  ip addr
+   50  vim /etc/hosts
+   51  scp /etc/hosts root@192.168.55.5:/etc/hosts
+   52  scp /etc/hosts root@192.168.55.6:/etc/hosts
+   53  ping node1
+   54  ping node2
+   55  kubeadm init
+   56  systemctl start kubelet
+   57  systemctl status kubelet
+   58  systemctl enable kubelet
+   59  kubeadm init
+   60  cat > /etc/sysctl.conf/k8s.config
+   61  cat > /etc/sysctl.d/k8s.config
+   62  rm /etc/containerd/config.toml
+   63  systemctl reload containerd
+   64  systemctl restart containerd
+   65  cat /proc/sys/net/ipv4/ip_forward
+   66  modprobe bridge
+   67  modprobe br_netfilter
+   68  kubeadm init
+   69  copy join command from the end of kubeadm init command
+   70  kubectl get node
+   71  export KUBECONFIG=/etc/kubernetes/admin.conf
+   72  kubectl get node
+
+kubectl cluster-info
+
+after this command you will see first two core dns is pending 
+Solution is install CNI (calico is best) or weave
+
+curl https://docs.projectcalico.org/manifests/calico.yaml -O
+
+OR
+
+kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+kubectl get all -A
+   81  kubectl get pods --all-namespaces
+
+
+kubeadm join 192.168.55.10:6443 --token rtyco7.ulo6mx8nulqlgpp3 \
+        --discovery-token-ca-cert-hash sha256:1156302efd9dd4b759b07146f70505968dde5a548bf98e1e2b342a58fe5d67e1
+
+
+kerbernets on UBANTU  ubantu 8.04
+	
+sudo -i	
+free -m
+    2  nproc
+    3  cat /etc/os-release
+https://docs.docker.com/engine/install/ubuntu/
+    4  apt update
+    5  apt-get install ca-certificates curl gnupg
+ install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+apt-get update
+
+apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+docker run hello-world
+
+
+
+
+install kubernetes app
+
+free -m
+   20  systemctl status docker
+   21  systemctl status containerd.service
+   22  apt-get install -y apt-transport-https ca-certificates curl
+
+   23  curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+   24  echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+   25  apt-get update
+   26  apt-get install -y kubelet kubeadm kubectl
+   27  apt-mark hold kubelet kubeadm kubectl
+   28  kubeadm version
+   29 
+   31  kubectl version -short
+   32  kubectl version --short
+
+ADD CLUSTER
+
+	 kubeadm init
+   36  rm /etc/containerd/config.toml
+   service containerd status
+
+   39  kubeadm init
+
+
+mkdir -p $HOME/.kube
+    8  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    9  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+OR
+
+ export KUBECONFIG=/etc/kubernetes/admin.conf
+
+
+   24  kubectl get pod
+it is in pending status. coz on master it is not allowed so untaint it cp  OR BEST WAY IS USE WORKER NODE
+   
+   26  kubectl get nodes
+   27  kubectl describe node master | grep -i taint
+
+JOIN CNI
+
+after this command you will see first two core dns is pending 
+Solution is install CNI (calico is best) or weave
+
+
+TO VERFIY
+
+FIRST CREAT POD
+
+kubectl run --image=nginx webapp
+kubectl get all -A
+kubectl get pod
+kubectl describe pod webapp
+
+
+TO UNTAINT
+
+kubectl taint node master node-role.kubernetes.io/control-plane:NoSchedule-
+kubectl describe node master | grep -i taint
+
+kubectl describe node master | grep -i taint
+
+kubectl get pod
+kubectl describe pod webapp
+
+
+
+how to use above pod this pod is webserver
+
+first check services
+kubectl get svc
+
+kubectl expose pod webapp --port=80 --name="web-svc" --type='NodePort'
+
+TO VERIFY WEBSERVER
+
+kubectl get svc
+kubectl get all
+
+
+
+
+kubeadm join 192.168.55.10:6443 --token 5wz5af.yt0949lkwj27lvso \
+        --discovery-token-ca-cert-hash sha256:9247adec3826e11744beda66bd988e46ead28c3bc151abea49c32742afbe533b

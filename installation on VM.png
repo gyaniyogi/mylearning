@@ -1,0 +1,177 @@
+System Prerequisites  
+
+Download & Install CentOS 7 Min
+Creating a master node 
+System requirements (Master)
+2048 mb - RAM 
+2 core processor 
+20GB Disk (safer side) 
+
+The Full Step by Step Installation Video: 
+https://www.youtube.com/watch?v=nbp9zxkmi74&t=138s 
+
+The master node will not get initiated if the RAM and virtual CPU cores not sufficient 
+
+Note: You don’t have to worry if you are using VirtualBox. You can always increase it.  
+
+If you are using VirtualBox, make sure you have a single Network Interface and sometimes Adapter 1 in VirtualBox does not work on Bridged Setting. You have to enable the second adapter and disable the first one.
+
+Overview  	
+
+This document will help you to install the k8 cluster. The document is purely for learning purposes and I do not recommend installing this setup for production use. The cluster installation will give you an idea about the installation process and what to check if something goes wrong. 
+
+Please follow the steps:
+
+Download Minimal  ISO for OS
+	CentOS 7 
+
+Complete the CentOS installation - Basic Installation
+
+Setup static IP Address 
+nmtui edit
+
+Update system hostname (all system): vim /etc/hostname
+	Example: 
+k8-master
+
+Update hosts file (all node info):  vim /etc/hosts
+	Example: 
+192.168.55.10		k8-master1
+192.168.55.20		K8-worker1
+192.168.55.30		k8-worker2
+
+Update system packages
+yum update
+
+Turn-Off Swap (all nodes) 
+	swapoff -a
+ vim /etc/fstab
+
+	To permanently off the swap we need to comment the swap partition form /etc/fstab
+
+Disable Firewall (all nodes) 
+sudo systemctl stop firewalld
+
+To permanently disable the firewall:
+systemctl disable firewalld
+
+
+Install below mentioned packages (All nodes):
+yum install -y wget
+yum install -y vim
+yum install -y git
+
+
+Install docker-runtime (All nodes)
+	In here I wanted to use doc
+
+Link    - Pleas e subscribe Brother if possible
+Install the yum-utils 
+
+ yum install -y yum-utils
+
+sudo yum-config-manager \
+--add-repo \
+https://download.docker.com/linux/centos/docker-ce.repo
+
+
+-y 
+Install docker engine 
+	
+sudo yum install containerd.io
+
+Install cri-dockerd (to use docker is a runtime for K8)
+Link 
+
+Install required packages:
+kubeadm, kubelet, kubectl 
+Link
+
+
+Init cluster 
+kubeadm init
+
+Verify the cluster info
+kubectl cluster-info
+If check system pods before CNI configuration,
+Install Calico CNI
+	Link
+By default Calico uses subnet 192.168.0.16/24.
+If you already using that subnet for nodes, you may need to change subnet by changing below mentioned parameter in calico.yaml (before deployment)
+   
+      - name: CALICO_IPV4POOL_CIDR
+        value: "10.142.0.0/24"
+
+ 
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the fol lowing as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+
+
+
+
+
+
+
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+
+
+kubeadm init --cri-socket unix:///run/cri-dockerd.sock
+
+
+If the Join command token is expired or you forgot:
+
+kubeadm token create --print-join-command
+
+Remove node from the cluster (--ignore-daemonsets will be used if you do not care about pods running on that node)
+
+kubectl drain <node hostname> --ignore-daemonsets
+
+kubectl delete <node hostname>
+
+On the Node: kubeadm reset
+
+
+Errors:
+Kubeadm unknown service runtime.v1alpha2.RuntimeService
+
+
+Solution:
+rm /etc/containerd/config.tomlSolution:
+rm /etc/containerd/config.toml
+systemctl restart rm containerd
+kubeadm init
+
+[ERROR FileContent--proc-sys-net-ipv4-ip_forward]:
+Solution: Link
+echo '1' > /proc/sys/net/ipv4/ip_forward
+modprobe bridmodprobe ge
+modprobe br_netfilter
+
+
+kubeadm join 192.168.55.10:6443 --token 7r204l.dokibh52fa83umhi \
+        --discovery-token-ca-cert-hash sha256:a18a6fe3b2a068853e69e1e4fb4b24e7b37b11f0f7a83a6feb34260572e7551f
+
+
+
+
+

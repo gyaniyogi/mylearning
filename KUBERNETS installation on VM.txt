@@ -1,0 +1,343 @@
+https://youtu.be/nbp9zxkmi74
+https://www.youtube.com/watch?v=2W6ING5xlmU
+
+System Prerequisites  
+
+Download & Install CentOS 7 Min
+Creating a master node 
+System requirements (Master)
+2048 mb - RAM 
+2 core processor 
+20GB Disk (safer side) 
+
+The Full Step by Step Installation Video: 
+https://www.youtube.com/watch?v=nbp9zxkmi74&t=138s 
+
+The master node will not get initiated if the RAM and virtual CPU cores not sufficient 
+
+Note: You don’t have to worry if you are using VirtualBox. You can always increase it.  
+
+If you are using VirtualBox, make sure you have a single Network Interface and sometimes Adapter 1 in VirtualBox does not work on Bridged Setting. You have to enable the second adapter and disable the first one.
+
+Overview  	
+
+This document will help you to install the k8 cluster. The document is purely for learning purposes and I do not recommend installing this setup for production use. The cluster installation will give you an idea about the installation process and what to check if something goes wrong. 
+
+Please follow the steps:
+
+Download Minimal  ISO for OS
+	CentOS 7 
+
+Complete the CentOS installation - Basic Installation
+
+Setup static IP Address 
+nmtui edit
+
+Update system hostname (all system): vim /etc/hostname
+	Example: 
+k8-master
+
+Update hosts file (all node info):  vim /etc/hosts
+	Example: 
+192.168.55.10		k8-master1
+192.168.55.20		K8-worker1
+192.168.55.30		k8-worker2
+
+Update system packages
+yum update
+
+Turn-Off Swap (all nodes) 
+	swapoff -a
+ vim /etc/fstab
+
+	To permanently off the swap we need to comment the swap partition form /etc/fstab
+
+Disable Firewall (all nodes) 
+sudo systemctl stop firewalld
+
+To permanently disable the firewall:
+systemctl disable firewalld
+
+
+Install below mentioned packages (All nodes):
+yum install -y wget
+yum install -y vim
+yum install -y git
+
+
+Install docker-runtime (All nodes)
+	In here I wanted to use doc
+
+Link    - Pleas e subscribe Brother if possible
+Install the yum-utils 
+
+ yum install -y yum-utils
+
+sudo yum-config-manager \
+--add-repo \
+https://download.docker.com/linux/centos/docker-ce.repo
+
+
+-y 
+Install docker engine 
+	
+sudo yum install containerd.io
+
+Install cri-dockerd (to use docker is a runtime for K8)
+Link 
+
+Install required packages:
+kubeadm, kubelet, kubectl 
+Link
+
+
+Init cluster 
+kubeadm init
+
+Verify the cluster info
+kubectl cluster-info
+If check system pods before CNI configuration,
+Install Calico CNI
+	Link
+By default Calico uses subnet 192.168.0.16/24.
+If you already using that subnet for nodes, you may need to change subnet by changing below mentioned parameter in calico.yaml (before deployment)
+   
+      - name: CALICO_IPV4POOL_CIDR
+        value: "10.142.0.0/24"
+
+ 
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the fol lowing as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+NOW CONNECT CNI 
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+
+
+KINDLY NOTE: BELOW IS THE COPIED CONTENT OF KUBEADM COMMAND ENDING LINES FOR JOINING NODES
+
+
+kubeadm join 192.168.55.10:6443 --token oxr55s.q3hcyoicw1calnbt \
+        --discovery-token-ca-cert-hash sha256:3967553f5dcc148248307d9753b4038622cbbd2ddd96b39c2686fa458b21bd9f
+
+
+
+
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+
+
+kubeadm init --cri-socket unix:///run/cri-dockerd.sock
+
+
+If the Join command token is expired or you forgot:
+
+kubeadm token create --print-join-command
+
+Remove node from the cluster (--ignore-daemonsets will be used if you do not care about pods running on that node)
+
+kubectl drain <node hostname> --ignore-daemonsets
+
+kubectl delete <node hostname>
+
+On the Node: kubeadm reset
+
+
+Errors:
+Kubeadm unknown service runtime.v1alpha2.RuntimeService
+
+
+Solution:
+rm /etc/containerd/config.tomlSolution:
+rm /etc/containerd/config.toml
+systemctl restart rm containerd
+kubeadm init
+
+[ERROR FileContent--proc-sys-net-ipv4-ip_forward]:
+Solution: Link
+echo '1' > /proc/sys/net/ipv4/ip_forward
+modprobe bridmodprobe ge
+modprobe br_netfilter
+
+
+kubeadm join 192.168.55.10:6443 --token 7r204l.dokibh52fa83umhi \
+        --discovery-token-ca-cert-hash sha256:a18a6fe3b2a068853e69e1e4fb4b24e7b37b11f0f7a83a6feb34260572e7551f
+
+
+    1 hostnamectl hostname node1
+    2  ip addr
+    3  nmtui
+    4  nmtui edit
+    5  ip addr
+    6  reboot
+    7  ping google
+    8  ping google.com
+    9  ip addr
+   10  nmtui edit
+   11  ping 8.8.8.8
+   12  ping gyanitechnologies.com
+   13  ping google.com
+   14  hostnamectl hostname
+   15  vim /etc/passwd
+   16  hostnamectl hostname master
+   17  exit
+   18  init 6
+   19  yum update -y
+   20  swapoff -a
+   21  vim /etc/fstab
+   22  getenforce
+   23  systemctl status firewalld.service
+   24  systemctl disable firewalld.service
+   25  yum install git
+   26  git --version
+   27  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+   37  yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+   38   systemctl start docker
+   39   systemctl status docker
+   40  docker run hello-world
+   41  systemctl is-enabled docker
+   42  systemctl enable docker
+   43  yum install kubectl kubeadm kubelet -y
+   44  cat > /etc/yum.repos.d/kubernetes.repo
+
+   45  yum update -y
+   46  yum install kubectl kubeadm kubelet -y
+   47  kubeadm version
+   48  kubeadm init
+   49  ip addr
+   50  vim /etc/hosts
+   51  scp /etc/hosts root@192.168.55.5:/etc/hosts
+   52  scp /etc/hosts root@192.168.55.6:/etc/hosts
+   53  ping node1
+   54  ping node2
+   55  kubeadm init
+   56  systemctl start kubelet
+   57  systemctl status kubelet
+   58  systemctl enable kubelet
+   59  kubeadm init
+   60  cat > /etc/sysctl.conf/k8s.config
+   61  cat > /etc/sysctl.d/k8s.config
+
+
+   62  rm /etc/containerd/config.toml
+   63  systemctl reload containerd
+   64  systemctl restart containerd
+   65  cat /proc/sys/net/ipv4/ip_forward
+   66  modprobe bridge
+   67  modprobe br_netfilter
+   68  kubeadm init
+   69  copy join command from the end of kubeadm init command
+   70  kubectl get node
+   71  export KUBECONFIG=/etc/kubernetes/admin.conf
+   72  kubectl get node
+
+kubectl cluster-info
+
+after this command you will see first two core dns is pending 
+Solution is install CNI (calico is best)
+
+curl https://docs.projectcalico.org/manifests/calico.yaml -O
+
+nmtui edit
+ip addr
+vim /etc/fstab
+swapoff -a
+vim /etc/sysconfig/selinux
+getenforce
+systemctl stop firewalld.service
+systemctl disable firewalld.service
+init 6
+
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+  systemctl start docker
+  systemctl status docker
+  systemctl enable docker
+
+yum install git -y
+
+cat > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+yum update -y
+yum install kubelet kubeadm kubectl -y
+systemctl start kubelet
+systemctl status kubelet
+systemctl enable kubelet
+systemctl start containerd
+systemctl enable containerd
+systemctl status containerd
+
+
+kubeadm init
+
+cat >> /etc/hosts
+ip address	master
+ip address	node1
+ip address	node2
+
+modprobe bridge
+modprobe br_netfilter
+cat > /etc/sysctl.d/k8s.config
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+
+rm -rf /etc/containerd/config.toml
+cat /proc/sys/net/ipv4/ip_forward
+
+systemctl restart containerd
+kubeadm init
+kubectl cluster-info
+kubectl get node
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+kubectl get node
+
+kubectl get pods -n kube-system
+ 
+kubectl get all -A
+
+
+SETUP OF CNI
+
+weave net
+
+kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+
+kubectl get pods -n kube-system
+
+
+
+
+
+
+
+
+
+
+
