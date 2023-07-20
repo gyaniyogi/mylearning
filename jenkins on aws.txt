@@ -1,0 +1,14 @@
+yum install java  -y
+yum install git -y
+
+yum install jenkins -y
+wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.reporpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+yum install jenkins -y
+systemctl enable jenkins
+systemctl start jenkins
+cat /var/lib/jenkins/secrets/initialAdminPassword
+
+wget https://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+yum install -y apache-maven
+mvn --version
