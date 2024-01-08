@@ -1,0 +1,114 @@
+BASH SHELL SCRIPTING
+https://www.freecodecamp.org/news/bash-scripting-tutorial-linux-shell-script-and-command-line-for-beginners/#pre-requisites
+
+How many of you know about bash shell?
+What is Linux?
+
+Why BASH SHELL scripting? or Advantages of Bash scripting
+
+Bash scripting is a powerful and versatile tool for automating system administration tasks, managing system resources, and performing other routine tasks in Unix/Linux systems. Some advantages of shell scripting are:
+
+1. Automation: Shell scripts allow you to automate repetitive tasks and processes, saving time and reducing the risk of errors that can occur with manual execution.
+2. Portability: Shell scripts can be run on various platforms and operating systems, including Unix, Linux, macOS, and even Windows through the use of emulators or virtual machines.
+3. Flexibility: Shell scripts are highly customizable and can be easily modified to suit specific requirements. They can also be combined with other programming languages or utilities to create more powerful scripts.
+4. Accessibility: Shell scripts are easy to write and don't require any special tools or software. They can be edited using any text editor, and most operating systems have a built-in shell interpreter.
+5. Integration: Shell scripts can be integrated with other tools and applications, such as databases, web servers, and cloud services, allowing for more complex automation and system management tasks.
+6. Debugging: Shell scripts are easy to debug, and most shells have built-in debugging and error-reporting tools that can help identify and fix issues quickly.
+
+bash scripting which includes variables, commands, inputs/ outputs, and debugging.
+
+Introduction
+Definition of Bash scripting
+A bash script is a file containing a sequence of commands that are executed by the bash program line by line. It allows you to perform a series of actions, such as navigating to a specific directory, creating a folder, and launching a process using the command line.
+
+By saving these commands in a script, you can repeat the same sequence of steps multiple times and execute them by running the script.
+Overview of Bash shell and command line interface
+The terms "shell" and "bash" are used interchangeably. But there is a subtle difference between the two.
+
+The term "shell" refers to a program that provides a command-line interface for interacting with an operating system. Bash (Bourne-Again SHell) is one of the most commonly used Unix/Linux shells and is the default shell in many Linux distributions.
+
+Kindly Note: You can determine your shell type using the ps command:
+
+[username@hostname   currentDirectory]$			(# is for root user)
+[user1@master   ~]$
+
+THREE BASIC USES OF SHELL:
+1. COMMAND
+2. COMMAND   -OPTIONS
+3. COMMAND TARGET(ARGUMENTS)
+	
+Give examples of a few command
+Basic Bash commands (echo, read, etc.)
+Here is a list of some of the most commonly used bash commands:
+
+cd: Change the directory to a different location.
+ls: List the contents of the current directory.
+mkdir: Create a new directory.
+touch: Create a new file.
+rm: Remove a file or directory.
+cp: Copy a file or directory.
+mv: Move or rename a file or directory.
+echo: Print text to the terminal.
+cat: Concatenate and print the contents of a file.
+grep: Search for a pattern in a file.
+chmod: Change the permissions of a file or directory.
+sudo: Run a command with administrative privileges.
+df: Display the amount of disk space available.
+history: Show a list of previously executed commands.
+ps: Display information about running processes.
+
+Kindly Note: You can always refer to a commands manual with the man command.
+
+How to Create and Execute Bash scripts?
+
+EDITOR (give Basic intro vi/vim)
+
+Script naming conventions
+By naming convention, bash scripts end with .sh However, bash scripts can run perfectly fine without the sh extension.
+
+Adding the Shebang
+Shebang tells the shell to execute it via bash shell.
+ Shebang is simply an absolute path to the bash interpreter.
+Bash scripts start with a shebang. Shebang is a combination of bash # and bang ! followed by the bash shell path. This is the first line of the script. 
+
+Below is an example of the shebang statement.
+The shebang (#!/bin/bash) points toward the bash shell path.
+#!/bin/bash
+
+How to find your bash shell path?
+[user1@master   ~]$which bash
+
+Variables and data types in Bash
+Variables let you store data. You can use variables to read, access, and manipulate data throughout your script.
+
+There are no data types in Bash. In Bash, a variable is capable of storing numeric values, individual characters, or strings of characters.
+
+In Bash, you can use and set the variable values in the following ways:
+1. Assign the value directly:
+[user1@master   ~]$name=yogesh
+
+[user1@master   ~]$echo $name
+yogesh
+
+Variable naming conventions
+In Bash scripting, the following are the variable naming conventions:
+
+Variable names should start with a letter or an underscore (_).
+Variable names can contain letters, numbers, and underscores (_).
+Variable names are case-sensitive.
+Variable names should not contain spaces or special characters.
+Use descriptive names that reflect the purpose of the variable.
+Avoid using reserved keywords, such as if, then, else, fi, and so on as variable names.
+
+Input and output in Bash scripts
+Gathering input
+In this section, we'll discuss some methods to provide input to our scripts.
+
+Reading the user input and storing it in a variable
+We can read the user input using the read command.
+
+[user1@master   ~]$vi yoyo2
+while read line
+do
+  echo $line
+done < input.txt
